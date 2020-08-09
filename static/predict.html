@@ -1,0 +1,70 @@
+ 
+ <!DOCTYPE html>
+ <html>
+ <head>
+ 	<title>gretting app</title>
+ <style type="text/css">
+ 	*{
+ 		font-size: 20px;
+ 	}
+ </style>
+
+
+ </head>
+ <body>
+ 		<input id="image-selector" type="file">
+ 		<button id="predict-button">predict</button>
+ 		<p style="front-weight:bold">Prediction</p>
+ 		<p>Anger: <span id="anger-prediction"></span> </p>
+ 		<p>Disgust: <span id="disgust-prediction"></span> </p>
+ 		<p>Fear: <span id="fear-prediction"></span> </p>
+ 		<p>Happy: <span id="happy-prediction"></span> </p>
+ 		<p>Sad: <span id="sad-prediction"></span> </p>
+ 		<p>Surprise: <span id="surprise-prediction"></span> </p>
+ 		<p>Neutral: <span id="neutral-prediction"></span> </p>
+ 		<img id="selected-image" src=""/>
+ 		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+ 		<script >
+ 			let base64Image;
+ 			$("#image-selector").change(function(){
+ 				let reader = new FileReader();
+ 				reader.onload = function(e){
+ 					let dataURL = reader.result;
+ 					$('#selected-image').attr("src",dataURL);
+ 					base64Image = dataURL.replace("data:image/png;base64,","")
+ 					console.log(base64Image);
+
+ 				}
+ 				reader.readAsDataURL($("#image-selector")[0].files[0]);
+ 				$("#anger-prediction").text("");
+ 				$("#disgust-prediction").text("");
+ 				$("#fear-prediction").text("");
+ 				$("#happy-prediction").text("");
+ 				$("#sad-prediction").text("");
+ 				$("#surprise-prediction").text("");
+ 				$("#neutral-prediction").text("");
+ 			});
+
+ 			$("#predict-button").click(function(event){
+ 				let message = {
+ 					image: base64Image
+ 				}
+ 				console.log(message);
+ 				$.post("http://127.0.0.1.5000/predict",JSON.stringify(message),function(response){
+ 					$("#anger-prediction").text(respose.prediction.anger.toFixed(6));
+ 					$("#disgust-prediction").text(respose.prediction.disgust.toFixed(6));
+ 					$("#fear-prediction").text(respose.prediction.fear.toFixed(6));
+ 					$("#happy-prediction").text(respose.prediction.happy.toFixed(6));
+ 					$("#sad-prediction").text(respose.prediction.sad.toFixed(6));
+ 					$("#surprise-prediction").text(respose.surprise.anger.toFixed(6));
+ 					$("#neutral-prediction").text(respose.prediction.neutral.toFixed(6));
+ 					console.log(respose);
+
+ 				});
+ 				}); 
+ 			
+ 			
+ 			
+ 		</script>
+ </body>
+ </html>
