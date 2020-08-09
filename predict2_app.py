@@ -36,8 +36,6 @@ def preprocess_image(image, target_size):
 
 
 
-print("loading keras model")
-get_model()
 
 @app.route("/predict", methods=["GET","POST"])
 def prediction():
@@ -62,3 +60,7 @@ def prediction():
 	}
 	return jsonify(response)	
 
+if __name__ = "__main__":
+	print("loading keras model")
+	get_model()
+	app.run()
